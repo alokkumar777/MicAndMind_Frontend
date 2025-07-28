@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://micandmind-backend.onrender.com",
+  baseURL: "https://micandmind-backend.onrender.com/api",
 });
 
 // Add token automatically
