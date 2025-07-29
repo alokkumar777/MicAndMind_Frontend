@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getBlog, addComment, deleteComment } from "../services/api";
+import Loader from "../components/Loader";
 
 function BlogDetail() {
   const { id } = useParams();
@@ -29,7 +30,7 @@ function BlogDetail() {
     fetchBlog();
   };
 
-  if (!blog) return <h2>Loading...</h2>;
+  if (!blog) return <Loader message="Loading Blog..." />;
 
   return (
     <div className="container">

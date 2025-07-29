@@ -1,26 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { getMyBlogs, getLikedBlogs } from "../services/api";
 import BlogCard from "../components/BlogCard";
+import Loader from "../components/Loader";
 
 function Profile() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [myBlogs, setMyBlogs] = useState([]);
   const [likedBlogs, setLikedBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchMyBlogs();
-    fetchLikedBlogs();
+    fetchData();
   }, []);
 
-  const fetchMyBlogs = async () => {
-    const { data } = await getMyBlogs();
-    setMyBlogs(data);
+  const fetchData = async () => {
+    try {
+      const [myBlogsRes, likedBlogsRes] = await Promise.all([
+        getMyBlogs(),
+        getLikedBlogs(),
+      ]);
+      setMyBlogs(myBlogsRes.data);
+      setLikedBlogs(likedBlogsRes.data);
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const fetchLikedBlogs = async () => {
-    const { data } = await getLikedBlogs();
-    setLikedBlogs(data);
-  };
+  if (loading) {
+    return <Loader message="Loading your profile..." />;
+  }
 
   return (
     <div className="container">
@@ -31,7 +41,7 @@ function Profile() {
       <h4>My Blogs</h4>
       {myBlogs.length > 0 ? (
         myBlogs.map((blog) => (
-          <BlogCard key={blog._id} blog={blog} refreshBlogs={fetchMyBlogs} />
+          <BlogCard key={blog._id} blog={blog} refreshBlogs={fetchData} />
         ))
       ) : (
         <p>No blogs created yet.</p>
@@ -41,7 +51,7 @@ function Profile() {
       <h4>Liked Blogs</h4>
       {likedBlogs.length > 0 ? (
         likedBlogs.map((blog) => (
-          <BlogCard key={blog._id} blog={blog} refreshBlogs={fetchLikedBlogs} />
+          <BlogCard key={blog._id} blog={blog} refreshBlogs={fetchData} />
         ))
       ) : (
         <p>No liked blogs yet.</p>
