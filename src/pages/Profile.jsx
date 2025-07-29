@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getMyBlogs, getLikedBlogs } from "../services/api";
 import BlogCard from "../components/BlogCard";
 import Loader from "../components/Loader";
+import "../styles/Profile.css";
 
 function Profile() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -33,7 +34,7 @@ function Profile() {
   }
 
   return (
-    <div className="container">
+    <div className="container profile-container">
       <h2>{user.username}'s Profile</h2>
       <p>Email: {user.email}</p>
 

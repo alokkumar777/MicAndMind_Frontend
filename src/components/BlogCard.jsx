@@ -28,7 +28,7 @@ const BlogCard = ({ blog, handleDelete, refreshBlogs }) => {
         </button>
 
         <Link to={`/blog/${blog._id}`} className="btn btn-primary btn-sm me-2">
-          Read More
+          <i className="fas fa-book-open"></i>
         </Link>
 
         {isOwner && (
@@ -37,13 +37,13 @@ const BlogCard = ({ blog, handleDelete, refreshBlogs }) => {
               to={`/edit/${blog._id}`}
               className="btn btn-warning btn-sm me-2"
             >
-              Edit
+              <i className="fas fa-edit"></i>
             </Link>
             <button
               onClick={() => handleDelete(blog._id)}
               className="btn btn-danger btn-sm"
             >
-              Delete
+              <i className="fas fa-trash"></i>
             </button>
           </>
         )}

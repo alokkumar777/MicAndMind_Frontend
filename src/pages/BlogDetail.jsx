@@ -46,7 +46,7 @@ function BlogDetail() {
               onClick={() => handleDeleteComment(c._id)}
               className="btn btn-sm btn-danger ms-2"
             >
-              Delete
+              <i className="fas fa-trash"></i>
             </button>
           )}
         </div>
