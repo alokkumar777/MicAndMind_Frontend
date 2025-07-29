@@ -7,44 +7,72 @@ function BlogDetail() {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
   const [commentText, setCommentText] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     fetchBlog();
-  }, []);
+  }, [id]);
 
   const fetchBlog = async () => {
-    const { data } = await getBlog(id);
-    setBlog(data);
+    setLoading(true);
+    setError(null);
+    try {
+      const { data } = await getBlog(id);
+      setBlog(data);
+    } catch (err) {
+      setError("Failed to load blog. Please try again later.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleAddComment = async (e) => {
     e.preventDefault();
-    await addComment(id, { text: commentText, author: user.username });
-    setCommentText("");
-    fetchBlog();
+    if (!commentText.trim()) return;
+    try {
+      await addComment(id, { text: commentText.trim(), author: user.username });
+      setCommentText("");
+      fetchBlog();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add comment, please try again.");
+    }
   };
 
   const handleDeleteComment = async (commentId) => {
-    await deleteComment(id, commentId);
-    fetchBlog();
+    if (!window.confirm("Are you sure you want to delete this comment?"))
+      return;
+    try {
+      await deleteComment(id, commentId);
+      fetchBlog();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete comment, please try again.");
+    }
   };
 
-  if (!blog) return <Loader message="Loading Blog..." />;
+  if (loading) return <Loader message="Loading Blog..." />;
+  if (error) return <div className="alert alert-danger">{error}</div>;
+  if (!blog) return <div>No blog found.</div>;
 
   return (
     <div className="container">
       <h2>{blog.title}</h2>
-      <p>{blog.content}</p>
+      <p style={{ whiteSpace: "pre-wrap" }}>{blog.content}</p>
       <hr />
       <h4>Comments</h4>
+      {blog.comments.length === 0 && <p>No comments yet.</p>}
       {blog.comments.map((c) => (
         <div key={c._id} className="mb-2">
           <strong>{c.author}:</strong> {c.text}
-          {user && c.user === user.id && (
+          {user && c.author === user.username && (
             <button
               onClick={() => handleDeleteComment(c._id)}
               className="btn btn-sm btn-danger ms-2"
+              aria-label={`Delete comment by ${c.author}`}
             >
               <i className="fas fa-trash"></i>
             </button>
@@ -61,7 +89,11 @@ function BlogDetail() {
             placeholder="Write a comment..."
             required
           ></textarea>
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={!commentText.trim()}
+          >
             Add Comment
           </button>
         </form>
