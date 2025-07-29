@@ -38,7 +38,7 @@ function Home() {
 
   return (
     <div className="blog-list">
-      <h2 className="mb-4">All Blogs</h2>
+      <h2 className="mb-4 fw-normal fs-2">Khayalaat...</h2>
       {blogs.length > 0 ? (
         blogs.map((blog) => (
           <BlogCard key={blog._id} blog={blog} handleDelete={handleDelete} />

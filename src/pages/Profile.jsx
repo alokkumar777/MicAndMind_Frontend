@@ -35,11 +35,11 @@ function Profile() {
 
   return (
     <div className="container profile-container">
-      <h2>{user.username}'s Profile</h2>
+      <h2 className="fw-normal fs-2">{user.username}'s Profile</h2>
       <p>Email: {user.email}</p>
 
       <hr />
-      <h4>My Blogs</h4>
+      <h4 className="fw-normal fs-4">My Blogs</h4>
       {myBlogs.length > 0 ? (
         myBlogs.map((blog) => (
           <BlogCard key={blog._id} blog={blog} refreshBlogs={fetchData} />
@@ -49,7 +49,7 @@ function Profile() {
       )}
 
       <hr />
-      <h4>Liked Blogs</h4>
+      <h4 className="fw-normal fs-4">Liked Blogs</h4>
       {likedBlogs.length > 0 ? (
         likedBlogs.map((blog) => (
           <BlogCard key={blog._id} blog={blog} refreshBlogs={fetchData} />

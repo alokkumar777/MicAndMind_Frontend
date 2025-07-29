@@ -19,12 +19,13 @@ function CreateBlog() {
 
   return (
     <div className="container">
-      <h2 className="mb-4">Create New Blog</h2>
+      <h2 className="mb-4 fs-2 fw-normal">Create New Blog</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Title</label>
           <input
             type="text"
+            placeholder="Unwan..."
             className="form-control"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -35,7 +36,8 @@ function CreateBlog() {
           <label className="form-label">Content</label>
           <textarea
             className="form-control"
-            rows="5"
+            rows="6"
+            placeholder="Har Woh Khayaal Jo Dil Se Guzre, Yahan Likha Jayega..."
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required

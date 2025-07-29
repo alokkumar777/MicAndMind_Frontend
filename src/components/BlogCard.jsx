@@ -15,7 +15,7 @@ const BlogCard = ({ blog, handleDelete, refreshBlogs }) => {
   return (
     <div className="card mb-3 shadow-sm">
       <div className="card-body">
-        <h5 className="card-title">{blog.title}</h5>
+        <h5 className="card-title fs-5">{blog.title}</h5>
         <p className="card-text">{blog.content.substring(0, 100)}...</p>
 
         <button
