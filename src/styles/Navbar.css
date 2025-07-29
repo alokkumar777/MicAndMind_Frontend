@@ -4,6 +4,11 @@
   font-weight: 700;
 }
 
+
+body {
+  margin-bottom: 5rem;
+}
+
 .bottom-nav {
   position: fixed;
   bottom: 0;

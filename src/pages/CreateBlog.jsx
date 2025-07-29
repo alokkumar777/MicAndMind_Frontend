@@ -1,21 +1,31 @@
 import React, { useState } from "react";
 import { createBlog } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import Loader from "../components/Loader"; // Adjust path if required
 
 function CreateBlog() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true); // Show loader on submitting
       await createBlog({ title, content });
-      navigate("/"); // redirect to home
+      setLoading(false);
+      navigate("/"); // Redirect after success
     } catch (error) {
       console.error(error);
+      setLoading(false); // Hide loader on error
+      // Optionally add error handling UI here
     }
   };
+
+  if (loading) {
+    return <Loader message="Creating blog..." />;
+  }
 
   return (
     <div className="container">
@@ -30,6 +40,7 @@ function CreateBlog() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
+            disabled={loading}
           />
         </div>
         <div className="mb-3">
@@ -41,9 +52,10 @@ function CreateBlog() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
+            disabled={loading}
           ></textarea>
         </div>
-        <button type="submit" className="btn btn-success">
+        <button type="submit" className="btn btn-success" disabled={loading}>
           Create Blog
         </button>
       </form>
